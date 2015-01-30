@@ -29,7 +29,7 @@ v=`cat stc1000p.h | grep STC1000P_VERSION`
 e=`cat stc1000p.h | grep STC1000P_EEPROM_VERSION`
 
 # Remove embedded HEX data from previous sketch and insert version info
-cat ../picprog.ino | sed -n '/^const char hex_celsius\[\] PROGMEM/q;p' | sed "s/^#define STC1000P_VERSION.*/$v/" | sed "s/^#define STC1000P_EEPROM_REV.*/$e/" >> picprog.tmp
+cat ../picprog.ino | sed -n '/^const char hex_celsius\[\] PROGMEM/q;p' | sed "s/^#define STC1000P_VERSION.*/$v/" | sed "s/^#define STC1000P_EEPROM_VERSION.*/$e/" >> picprog.tmp
 
 # Insert new HEX data
 echo "const char hex_celsius[] PROGMEM = {" >> picprog.tmp; 
