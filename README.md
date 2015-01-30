@@ -7,7 +7,7 @@ This is a firmware and Arduino based uploader for the STC-1000 dual stage thermo
 
 It is a fork off of [STC\-1000+](https://github.com/matsstaff/stc1000p/) visit that project for more information.
 
-# Download by visiting the [releases page](https://github.com/matsstaff/stc1000p-ovbsc/releases)
+Download by visiting the [releases page](https://github.com/matsstaff/stc1000p-ovbsc/releases)
 
 Features
 --------
