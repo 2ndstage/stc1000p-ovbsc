@@ -89,7 +89,7 @@ Program algorithm
 * (This is when you dough in and do manual vorlauf)
 * Wait until power key is pressed
 * *x* = 1
-* *Init mashstep*: Thermostat off, set output to *PO*, pump on, countdown = *ASd* minutes
+* *Init mashstep*: Thermostat off, set output to *SO*, pump on, countdown = *ASd* minutes
 * Wait until temp >= *Ptx* (or end program if countdown = 0)
 * Thermostat on with output *PO*, countdown = *Pdx*
 * Wait until countdown = 0
@@ -107,6 +107,8 @@ Program algorithm
 * Output = *bO*, countdown = *bd* minutes
 * Wait until countdown = 0, if countdown = *hdx* then hdx alarm
 * Ch alarm, output = 0, pump off, end program
+
+During the program, a single press on the power button will pause the program (during pause, a LED will flash and all outputs will be off). Press the power button again and the program will resume.
 
 Updates
 -------
