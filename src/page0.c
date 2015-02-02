@@ -262,8 +262,8 @@ static enum prg_state_enum {
 
 unsigned char prg_state=0;
 unsigned int countdown=0;
+unsigned char mashstep=0;
 static void program_fsm(){
-	static unsigned char mashstep;
 	static unsigned char sec_countdown=60;
 
 	if(OFF){
@@ -467,11 +467,28 @@ static void init() {
 	// Enable Timer2 interrupt
 	TMR2IE = 1;
 
-	// Postscaler 1:16, - , prescaler 1:16
-	T4CON = 0b01111010;
-	TMR4ON = 1; // eeprom_read_config(EEADR_POWER_ON);
-	// @4MHz, Timer 2 clock is FOSC/4 -> 1MHz prescale 1:16-> 62.5kHz, 244 and postscale 1:16 -> 16.01 Hz or about 62.5ms
-	PR4 = 244;
+	//Timer1 Registers Prescaler= 1 - TMR1 Preset = 3036 - Freq = 16.00 Hz - Period = 0.062500 seconds
+	// T1CON
+	TMR1CS1 = 0;
+	TMR1CS0 = 0;
+//	T1CKPS1 = 1;   // bits 5-4  Prescaler Rate Select bits
+//	T1CKPS0 = 1;   // bit 4
+	T1CKPS1 = 0;   // bits 5-4  Prescaler Rate Select bits
+	T1CKPS0 = 0;   // bit 4
+	T1OSCEN = 1;   // bit 3 Timer1 Oscillator Enable Control bit 1 = on
+	NOT_T1SYNC = 1;    // bit 2 Timer1 External Clock Input Synchronization Control bit...1 = Do not synchronize external clock input
+//	TMR1CS = 0;    // bit 1 Timer1 Clock Source Select bit...0 = Internal clock (FOSC/4)
+	TMR1ON = 1;    // bit 0 enables timer
+//	TMR1H = 11;             // preset for timer1 MSB register
+//	TMR1L = 220;             // preset for timer1 LSB register
+
+//	TMR1IE = 1;	// Enable interrupts
+
+	// CCP4 in special event trigger mode
+	// TODO Datasheet is ambigous, needs to be ECCP1 or CCP4?
+	CCPR4H = 0xF4;
+	CCPR4L = 0x24;
+	CCP4CON = 0xB;
 
 	// Postscaler 1:7, Enable counter, prescaler 1:64
 	T6CON = 0b00110111;
@@ -527,16 +544,8 @@ static void interrupt_service_routine(void) __interrupt 0 {
 }
 
 //#define AD_FILTER_SHIFT		6
-#define AD_FILTER_SHIFT		4
+#define AD_FILTER_SHIFT		1
 #define START_TCONV_1()		(ADCON0 = _CHS1 | _ADON)
-#define START_TCONV_2()		(ADCON0 = _CHS0 | _ADON)
-
-static unsigned int read_ad(unsigned int adfilter){
-	ADGO = 1;
-	while(ADGO);
-	ADON = 0;
-	return ((adfilter - (adfilter >> AD_FILTER_SHIFT)) + ((ADRESH << 8) | ADRESL));
-}
 
 static int ad_to_temp(unsigned int adfilter){
 	unsigned char i;
@@ -561,7 +570,7 @@ static int ad_to_temp(unsigned int adfilter){
  * Main entry point.
  */
 void main(void) __naked {
-	unsigned int millisx60=0;
+	unsigned int cnt16Hz=0;
 	unsigned int ad_filter=(0x7fff >> (6 - AD_FILTER_SHIFT));
 
 	init();
@@ -576,7 +585,7 @@ void main(void) __naked {
 			// Handle button press and menu
 			button_menu_fsm();
 
-			if(!TMR4ON){
+			if(!TMR1ON){
 				led_e.raw = LED_OFF;
 				led_10.raw = LED_O;
 				led_1.raw = led_01.raw = LED_F;
@@ -586,17 +595,14 @@ void main(void) __naked {
 			TMR6IF = 0;
 		}
 
-		if(TMR4IF) {
+		if(CCP4IF) {
 
-			millisx60++;
-
-			ad_filter = read_ad(ad_filter);
-			START_TCONV_1();
+			cnt16Hz++;
 
 			output_control();
 
 			// Only run every 16th time called, that is 16x62.5ms = 1 sec
-			if((millisx60 & 0xf) == 0) {
+			if((((unsigned char)cnt16Hz) & 0xf) == 0) {
 
 				temperature = ad_to_temp(ad_filter) + eeprom_read_config(EEADR_MENU_ITEM(tc));
 				
@@ -604,7 +610,7 @@ void main(void) __naked {
 				temperature_control();
 
 				if(MENU_IDLE){
-					if(ALARM && (millisx60 & 0x10)){
+					if(ALARM && (cnt16Hz & 0x10)){
 						led_10.raw = al_led_10.raw;
 						led_1.raw = al_led_1.raw;
 						led_01.raw = al_led_01.raw;
@@ -615,8 +621,12 @@ void main(void) __naked {
 
 			} // End 1 sec section
 
-			// Reset timer flag
-			TMR4IF = 0;
+			while(ADGO);
+			ad_filter = ((ad_filter - (ad_filter >> AD_FILTER_SHIFT)) + ((ADRESH << 8) | ADRESL));
+
+			START_TCONV_1();
+
+			CCP4IF = 0;
 		}
 
 		// Reset watchdog

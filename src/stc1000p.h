@@ -236,6 +236,7 @@ extern unsigned char output;
 extern unsigned char prg_state;
 extern unsigned int countdown;
 
+extern unsigned char mashstep;
 
 extern unsigned int eeprom_read_config(unsigned char eeprom_address);
 extern void eeprom_write_config(unsigned char eeprom_address,unsigned int data);
