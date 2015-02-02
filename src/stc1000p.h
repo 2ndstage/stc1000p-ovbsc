@@ -84,12 +84,11 @@
 
 /* Defaults */
 #ifdef FAHRENHEIT
-// TODO Sane values...
-#define DEFAULT_St			(690)
-#define DEFAULT_mt			(670)
+#define DEFAULT_St			(153)
+#define DEFAULT_mt			(149)
 #else  // CELSIUS
-#define DEFAULT_St			(345)
-#define DEFAULT_mt			(345)
+#define DEFAULT_St			(670)
+#define DEFAULT_mt			(660)
 #endif
 
 /* Limits */
@@ -117,7 +116,7 @@ enum e_item_type {
 #define MENU_DATA(_) \
     _(Sd, 	LED_S, 	LED_d, 	LED_OFF,	t_duration,	0) 		\
     _(St, 	LED_S, 	LED_t, 	LED_OFF, 	t_temperature,	DEFAULT_St)	\
-    _(SO, 	LED_S, 	LED_O, 	LED_OFF,	t_percentage,	200)		\
+    _(SO, 	LED_S, 	LED_O, 	LED_OFF,	t_percentage,	150)		\
     _(Pt1, 	LED_P, 	LED_t, 	LED_1,		t_temperature,	DEFAULT_mt)	\
     _(Pd1, 	LED_P, 	LED_d, 	LED_1,		t_duration,	15)		\
     _(Pt2, 	LED_P, 	LED_t, 	LED_2,		t_temperature,	DEFAULT_mt)	\
@@ -128,10 +127,10 @@ enum e_item_type {
     _(Pd4, 	LED_P, 	LED_d, 	LED_4,		t_duration,	0)		\
     _(PO, 	LED_P, 	LED_O, 	LED_OFF,	t_percentage,	50)		\
     _(Ht, 	LED_H, 	LED_t, 	LED_OFF,	t_temperature,	985)		\
-    _(HO, 	LED_H, 	LED_O, 	LED_OFF,	t_percentage,	0)		\
-    _(Hd, 	LED_H, 	LED_d, 	LED_OFF,	t_duration,	0)		\
-    _(bO, 	LED_b, 	LED_O, 	LED_OFF,	t_percentage,	0)		\
-    _(bd, 	LED_b, 	LED_d, 	LED_OFF,	t_duration,	0)		\
+    _(HO, 	LED_H, 	LED_O, 	LED_OFF,	t_percentage,	75)		\
+    _(Hd, 	LED_H, 	LED_d, 	LED_OFF,	t_duration,	15)		\
+    _(bO, 	LED_b, 	LED_O, 	LED_OFF,	t_percentage,	150)		\
+    _(bd, 	LED_b, 	LED_d, 	LED_OFF,	t_duration,	90)		\
     _(hd1, 	LED_h, 	LED_d, 	LED_1,		t_duration,	60)		\
     _(hd2, 	LED_h, 	LED_d, 	LED_2,		t_duration,	45)		\
     _(hd3, 	LED_h, 	LED_d, 	LED_3, 		t_duration,	15)		\
@@ -140,7 +139,7 @@ enum e_item_type {
     _(cO, 	LED_c, 	LED_O, 	LED_OFF,	t_percentage,	80)		\
     _(cP, 	LED_c, 	LED_P, 	LED_OFF,	t_bool,		0)		\
     _(cSP, 	LED_c, 	LED_S, 	LED_P, 		t_temperature,	0)		\
-    _(ASd, 	LED_A, 	LED_S, 	LED_d, 		t_duration,	90)		\
+    _(ASd, 	LED_A, 	LED_S, 	LED_d, 		t_duration,	70)		\
 
 
 

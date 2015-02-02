@@ -336,12 +336,12 @@ static void program_fsm(){
 		break;
 		case prg_init_mash_step:
 			setpoint = eeprom_read_config(EEADR_MENU_ITEM(Pt1) + (mashstep << 1)); /* Mash step temp */
-			output = eeprom_read_config(EEADR_MENU_ITEM(PO));
+			output = eeprom_read_config(EEADR_MENU_ITEM(SO));
 			THERMOSTAT = 0;
 			PUMP = 1;
 			if(temperature >= setpoint){
 				THERMOSTAT = 1;
-				thermostat_output = output;
+				thermostat_output = eeprom_read_config(EEADR_MENU_ITEM(PO));
 				countdown = eeprom_read_config(EEADR_MENU_ITEM(Pd1) + (mashstep << 1)); /* Mash step duration */
 				prg_state = prg_mash;
 			} else if(countdown==0){
