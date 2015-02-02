@@ -117,7 +117,7 @@ enum e_item_type {
 #define MENU_DATA(_) \
     _(Sd, 	LED_S, 	LED_d, 	LED_OFF,	t_duration,	0) 		\
     _(St, 	LED_S, 	LED_t, 	LED_OFF, 	t_temperature,	DEFAULT_St)	\
-    _(SO, 	LED_r, 	LED_O, 	LED_OFF,	t_percentage,	200)		\
+    _(SO, 	LED_S, 	LED_O, 	LED_OFF,	t_percentage,	200)		\
     _(Pt1, 	LED_P, 	LED_t, 	LED_1,		t_temperature,	DEFAULT_mt)	\
     _(Pd1, 	LED_P, 	LED_d, 	LED_1,		t_duration,	15)		\
     _(Pt2, 	LED_P, 	LED_t, 	LED_2,		t_temperature,	DEFAULT_mt)	\
