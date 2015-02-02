@@ -38,7 +38,7 @@ Parameters
 |Pt3|Mash step 3 setpoint|-40.0 to 140°C or -40.0 to 250°F|
 |Pd3|Mash step 3 duration|0-999 minutes|
 |Pt4|Mash step 4 setpoint|-40.0 to 140°C or -40.0 to 250°F|
-|Pd5|Mash step 4 duration|0-999 minutes|
+|Pd4|Mash step 4 duration|0-999 minutes|
 |PO|Mashing output|0-200%|
 |Ht|Hot break temperature|-40.0 to 140°C or -40.0 to 250°F|
 |HO|Hot break output|0-200%|

@@ -175,12 +175,17 @@ void button_menu_fsm(){
 				led_1.raw = LED_F;
 				led_01.raw = LED_F;
 				led_e.raw = LED_OFF;
+			} else if(PAUSE){
+				led_10.raw = LED_P;
+				led_1.raw = LED_S;
+				led_01.raw = LED_E;
+				led_e.raw = LED_OFF;
 			} else if(THERMOSTAT){
 				temperature_to_led(setpoint);
 			} else {
 				int_to_led(output);
 			}
-			if(BTN_RELEASED(BTN_UP)){
+			if(!BTN_HELD(BTN_UP)){
 				menustate = menu_idle;
 			}
 		break;
@@ -219,16 +224,17 @@ void button_menu_fsm(){
 					menustate = menu_show_countdown;
 				}
 			}
-			if(BTN_RELEASED(BTN_DOWN)){
+			if(!BTN_HELD(BTN_DOWN)){
 				menustate = menu_idle;
 			}
 		break;
 		case menu_show_countdown:
 			int_to_led(countdown);
 			if(m_countdown==0){
+				m_countdown = 20;
 				menustate = menu_show_state;
 			}
-			if(BTN_RELEASED(BTN_DOWN)){
+			if(!BTN_HELD(BTN_DOWN)){
 				menustate = menu_idle;
 			}
 		break;
