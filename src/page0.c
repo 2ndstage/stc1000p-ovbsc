@@ -530,35 +530,14 @@ static void interrupt_service_routine(void) __interrupt 0 {
 	}
 }
 
-//#define AD_FILTER_SHIFT		6
-#define AD_FILTER_SHIFT		1
 #define START_TCONV_1()		(ADCON0 = _CHS1 | _ADON)
-
-static int ad_to_temp(unsigned int adfilter){
-	unsigned char i;
-	long temp = 32;
-	unsigned char a = ((adfilter >> (AD_FILTER_SHIFT - 1)) & 0x3f); // Lower 6 bits
-	unsigned char b = ((adfilter >> (AD_FILTER_SHIFT + 5)) & 0x1f); // Upper 5 bits
-
-	// Interpolate between lookup table points
-	for (i = 0; i < 64; i++) {
-		if(a <= i) {
-			temp += ad_lookup[b];
-		} else {
-			temp += ad_lookup[b + 1];
-		}
-	}
-
-	// Divide by 64 to get back to normal temperature
-	return (temp >> 6);
-}
 
 /*
  * Main entry point.
  */
 void main(void) __naked {
 	unsigned int cnt16Hz=0;
-	unsigned int ad_filter=(0x7fff >> (6 - AD_FILTER_SHIFT));
+	unsigned int ad_filter=0;
 
 	init();
 
@@ -591,8 +570,27 @@ void main(void) __naked {
 			// Only run every 16th time called, that is 16x62.5ms = 1 sec
 			if((((unsigned char)cnt16Hz) & 0xf) == 0) {
 
-				temperature = ad_to_temp(ad_filter) + eeprom_read_config(EEADR_MENU_ITEM(tc));
+				{
+					unsigned char i;
+					long temp = 32;
+					unsigned char a = ((ad_filter >> 3) & 0x3f); // Lower 6 bits
+					unsigned char b = ((ad_filter >> 9) & 0x1f); // Upper 5 bits
+
+					// Interpolate between lookup table points
+					for (i = 0; i < 64; i++) {
+						if(a <= i) {
+							temp += ad_lookup[b];
+						} else {
+							temp += ad_lookup[b + 1];
+						}
+					}
+
+					// Divide by 64 to get back to normal temperature
+					temperature = (temp >> 6);
+				}
 				
+				ad_filter = 0;
+
 				program_fsm();
 				temperature_control();
 
@@ -609,7 +607,7 @@ void main(void) __naked {
 			} // End 1 sec section
 
 			while(ADGO);
-			ad_filter = ((ad_filter - (ad_filter >> AD_FILTER_SHIFT)) + ((ADRESH << 8) | ADRESL));
+			ad_filter += ((ADRESH << 8) | ADRESL);
 
 			START_TCONV_1();
 
