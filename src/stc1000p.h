@@ -93,7 +93,6 @@
 
 /* Limits */
 #ifdef FAHRENHEIT
-// TODO Sane values...
 #define MIN_TEMP			(-400)
 #define MAX_TEMP			(2500)
 #define MIN_TEMP_DIFF			(-100)
@@ -191,6 +190,19 @@ enum menu_enum {
 #define LED_y	0xa1
 
 /* Declare functions and variables from Page 0 */
+
+static enum prg_state_enum {
+	prg_off=0,
+	prg_wait_strike,
+	prg_strike,
+	prg_strike_wait_alarm,
+	prg_init_mash_step,
+	prg_mash,
+	prg_wait_boil_up_alarm,
+	prg_init_boil_up,
+	prg_hotbreak,
+	prg_boil
+};
 
 typedef union
 {

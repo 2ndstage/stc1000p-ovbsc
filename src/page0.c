@@ -247,19 +247,6 @@ static void temperature_control(){
 	}
 }
 
-static enum prg_state_enum {
-	prg_off=0,
-	prg_wait_strike,
-	prg_strike,
-	prg_strike_wait_alarm,
-	prg_init_mash_step,
-	prg_mash,
-	prg_wait_boil_up_alarm,
-	prg_init_boil_up,
-	prg_hotbreak,
-	prg_boil
-};
-
 unsigned char prg_state=0;
 unsigned int countdown=0;
 unsigned char mashstep=0;

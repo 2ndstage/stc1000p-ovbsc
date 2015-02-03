@@ -109,7 +109,6 @@ enum menu_states {
 	menu_set_value
 };
 
-
 /* Due to a fault in SDCC, static local variables are not initialized
  * properly, so the variables below were moved from button_menu_fsm()
  * and made global.
@@ -198,29 +197,46 @@ void button_menu_fsm(){
 			} else if(RUN_PRG){
 				led_01.raw = LED_OFF;
 				led_e.raw = LED_OFF;
-				if(prg_state<4){ //prg_init_mash_step
+				if(prg_state == prg_wait_strike){
 					led_10.raw = LED_S;
 					led_1.raw = LED_t;
-				} else if(prg_state<6){ //prg_wait_boil_up_alarm
-					led_10.raw = LED_P;
-					led_1.raw = LED_OFF;
-				} else if(prg_state<9){ //prg_boil
+					led_01.raw = LED_d;
+				} else if(prg_state == prg_strike){
+					led_10.raw = LED_S;
+					led_1.raw = LED_t;
+				} else if(prg_state == prg_init_mash_step){
+					led_10.raw = LED_U;
+					led_1.raw = LED_P;
+					led_01.raw = led_lookup[mashstep];
+				} else if(prg_state == prg_mash){
+ 					led_10.raw = LED_OFF;
+					led_1.raw = LED_P;
+					led_01.raw = led_lookup[mashstep];
+				} else if(prg_state == prg_init_boil_up){
+					led_10.raw = LED_b;
+					led_1.raw = LED_U;
+				} else if(prg_state == prg_hotbreak){
 					led_10.raw = LED_H;
 					led_1.raw = LED_b;
-				} else {
+				} else if(prg_state == prg_boil){
 					led_10.raw = LED_b;
 					led_1.raw = LED_OFF;
 				}
 			} else if(THERMOSTAT){
-				led_10.raw = LED_t;
-				led_1.raw = LED_h;
+				led_10.raw = LED_C;
+				led_1.raw = LED_t;
+				led_01.raw = LED_OFF;
+				led_e.raw = LED_OFF;
+			} else{
+				led_10.raw = LED_C;
+				led_1.raw = LED_O;
 				led_01.raw = LED_OFF;
 				led_e.raw = LED_OFF;
 			}
 			if(m_countdown==0){
 				m_countdown = 20;
 				// prg_wait_strike,prg_mash,prg_hotbreak,prg_boil
-				if(prg_state == 1 || prg_state == 5 || prg_state > 8){
+				if(prg_state == prg_wait_strike || prg_state == prg_mash || prg_state >= prg_hotbreak){
 					menustate = menu_show_countdown;
 				}
 			}

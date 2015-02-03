@@ -30,7 +30,7 @@ Parameters
 |--------|-------|-------|
 |Sd|Strike delay|0-999 minutes|
 |St|Strike water setpoint|-40.0 to 140°C or -40.0 to 250°F|
-|SO|Strike output (also used to reach hotbreak)|0-200%|
+|SO|Strike output (also used to reach hotbreak and between mash steps)|0-200%|
 |Pt1|Mash step 1 setpoint|-40.0 to 140°C or -40.0 to 250°F|
 |Pd1|Mash step 1 duration|0-999 minutes|
 |Pt2|Mash step 2 setpoint|-40.0 to 140°C or -40.0 to 250°F|
@@ -85,7 +85,7 @@ Program algorithm
 * Thermostat on with output *SO*
 * St alarm, countdown = *ASd* minutes
 * Wait until keypress (or end program if countdown = 0)
-* pause (output off, pump off)
+* Pause (output off, pump off)
 * (This is when you dough in and do manual vorlauf)
 * Wait until power key is pressed
 * *x* = 1
@@ -97,7 +97,7 @@ Program algorithm
 * if x<=4 goto *Init mashstep* 
 * bU alarm, countdown = *ASd* minutes
 * Wait until keypress (or end program if countdown = 0)
-* pause (output off, pump off)
+* Pause (output off, pump off)
 * (This is when you remove grains and sparge)
 * Wait until power key is pressed
 * Thermostat off, output = *SO*, pump off, countdown = *ASd* minutes
