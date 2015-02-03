@@ -570,6 +570,7 @@ void main(void) __naked {
 			// Only run every 16th time called, that is 16x62.5ms = 1 sec
 			if((((unsigned char)cnt16Hz) & 0xf) == 0) {
 
+				/* Convert AD readings to temperature */
 				{
 					unsigned char i;
 					long temp = 32;
