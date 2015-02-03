@@ -199,14 +199,13 @@ void button_menu_fsm(){
 				led_e.raw = LED_OFF;
 				if(prg_state == prg_wait_strike){
 					led_10.raw = LED_S;
-					led_1.raw = LED_t;
-					led_01.raw = LED_d;
+					led_1.raw = LED_d;
 				} else if(prg_state == prg_strike){
 					led_10.raw = LED_S;
 					led_1.raw = LED_t;
 				} else if(prg_state == prg_init_mash_step){
-					led_10.raw = LED_U;
-					led_1.raw = LED_P;
+					led_10.raw = LED_P;
+					led_1.raw = LED_U;
 					led_01.raw = led_lookup[mashstep];
 				} else if(prg_state == prg_mash){
  					led_10.raw = LED_OFF;
