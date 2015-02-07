@@ -421,7 +421,7 @@ static void init() {
 	OSCCON = 0b01101010; // 4MHz
 
 	// Heat, cool as output, Thermistor as input, piezo output
-	TRISA = 0b00001110;
+	TRISA = 0b00001100;
 	LATA = 0; // Drive relays and piezo low
 
 	// LED Common anodes
@@ -432,17 +432,15 @@ static void init() {
 	TRISC = 0;
 
 	// Analog input on thermistor
-	ANSELA = _ANSA1 | _ANSA2;
-	// Select AD channel AN2
-//	ADCON0bits.CHS = 2;
+	ANSELA = _ANSA1;
 	// AD clock FOSC/8 (FOSC = 4MHz)
 	ADCS0 = 1;
 	// Right justify AD result
 	ADFM = 1;
 	// Enable AD
-//	ADON = 1;
+	ADCON0 = _CHS1 | _ADON;
 	// Start conversion
-//	ADGO = 1;
+	ADGO = 1;
 
 	// IMPORTANT FOR BUTTONS TO WORK!!! Disable analog input -> enables digital input
 	ANSELC = 0;
@@ -530,8 +528,6 @@ static void interrupt_service_routine(void) __interrupt 0 {
 	}
 }
 
-#define START_TCONV_1()		(ADCON0 = _CHS1 | _ADON)
-
 /*
  * Main entry point.
  */
@@ -540,8 +536,6 @@ void main(void) __naked {
 	unsigned int ad_filter=0;
 
 	init();
-
-	START_TCONV_1();
 
 	//Loop forever
 	while (1) {
@@ -609,8 +603,6 @@ void main(void) __naked {
 
 			while(ADGO);
 			ad_filter += ((ADRESH << 8) | ADRESL);
-
-			START_TCONV_1();
 
 			CCP4IF = 0;
 		}
