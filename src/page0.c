@@ -462,7 +462,7 @@ static void init() {
 //	T1CKPS0 = 1;   // bit 4
 	T1CKPS1 = 0;   // bits 5-4  Prescaler Rate Select bits
 	T1CKPS0 = 0;   // bit 4
-	T1OSCEN = 1;   // bit 3 Timer1 Oscillator Enable Control bit 1 = on
+	T1OSCEN = 0;   // bit 3 Timer1 Oscillator Enable Control bit 1 = on
 	NOT_T1SYNC = 1;    // bit 2 Timer1 External Clock Input Synchronization Control bit...1 = Do not synchronize external clock input
 //	TMR1CS = 0;    // bit 1 Timer1 Clock Source Select bit...0 = Internal clock (FOSC/4)
 	TMR1ON = 1;    // bit 0 enables timer
@@ -536,7 +536,7 @@ static void interrupt_service_routine(void) __interrupt 0 {
  * Main entry point.
  */
 void main(void) __naked {
-	unsigned int cnt16Hz=0;
+	unsigned char cnt16Hz=0;
 	unsigned int ad_filter=0;
 
 	init();
