@@ -452,6 +452,7 @@ static void init() {
 	// Enable Timer2 interrupt
 	TMR2IE = 1;
 
+#ifdef T1MAIN
 	//Timer1 Registers Prescaler= 1 - TMR1 Preset = 3036 - Freq = 16.00 Hz - Period = 0.062500 seconds
 	// T1CON
 	TMR1CS1 = 0;
@@ -474,6 +475,13 @@ static void init() {
 	CCPR4H = 0xF4;
 	CCPR4L = 0x24;
 	CCP4CON = 0xB;
+#else
+	// Postscaler 1:16, - , prescaler 1:16
+	T4CON = 0b01111010;
+	TMR4ON = 1; // eeprom_read_config(EEADR_POWER_ON);
+	// @4MHz, Timer 2 clock is FOSC/4 -> 1MHz prescale 1:16-> 62.5kHz, 244 and postscale 1:16 -> 16.01 Hz or about 62.5ms
+	PR4 = 244;
+#endif
 
 	// Postscaler 1:7, Enable counter, prescaler 1:64
 	T6CON = 0b00110111;
@@ -545,8 +553,11 @@ void main(void) __naked {
 			// Handle button press and menu
 			button_menu_fsm();
 
+#ifdef T1MAIN
 			if(!TMR1ON){
-				led_e.raw = LED_OFF;
+#else
+			if(!TMR4ON){
+#endif				led_e.raw = LED_OFF;
 				led_10.raw = LED_O;
 				led_1.raw = led_01.raw = LED_F;
 			}
@@ -555,8 +566,11 @@ void main(void) __naked {
 			TMR6IF = 0;
 		}
 
+#ifdef T1MAIN
 		if(CCP4IF) {
-
+#else
+		if(TMR4IF) {
+#endif
 			cnt16Hz++;
 
 			output_control();
@@ -601,10 +615,15 @@ void main(void) __naked {
 
 			} // End 1 sec section
 
+#ifdef T1MAIN
 			while(ADGO);
 			ad_filter += ((ADRESH << 8) | ADRESL);
-
 			CCP4IF = 0;
+#else
+			ad_filter += ((ADRESH << 8) | ADRESL);
+			ADGO = 1;
+			TMR4IF = 0;
+#endif
 		}
 
 		// Reset watchdog
