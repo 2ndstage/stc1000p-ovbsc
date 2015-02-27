@@ -300,7 +300,7 @@ static void program_fsm(){
 			PUMP=1;
 			if(temperature >= setpoint){
 				THERMOSTAT = 1;
-				thermostat_output = output;
+				thermostat_output = eeprom_read_config(EEADR_MENU_ITEM(PO));
 				ALARM = 1;
 				al_led_10.raw = LED_S;
 				al_led_1.raw = LED_t;
