@@ -78,9 +78,12 @@
 /* Initialized to 1 */
 #define OFF				C1SP
 
-#define	PUMP_ON()			do { TRISA1=1; LATA1=1; } while(0)
-#define PUMP_OFF()			do { TRISA1=1; LATA1=0; } while(0)
-#define PUMP_MANUAL()			do { TRISA1=0; LATA1=0; } while(0)
+// RA1 output, write high.
+#define	PUMP_ON()			do { TRISA1=0; LATA1=1; } while(0)
+// RA1 input, tristate
+#define PUMP_MANUAL()			do { TRISA1=1; LATA1=0; } while(0)
+// RA1 output, write low.
+#define PUMP_OFF()			do { TRISA1=0; LATA1=0; } while(0)
 
 /* Defaults */
 #ifdef FAHRENHEIT

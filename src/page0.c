@@ -424,6 +424,9 @@ static void init() {
 	TRISA = 0b00001100;
 	LATA = 0; // Drive relays and piezo low
 
+	// Make sure weak pullup is disabled for RA1
+	WPUA1 = 0;
+
 	// LED Common anodes
 	TRISB = 0;
 	LATB = 0;
