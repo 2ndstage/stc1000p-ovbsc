@@ -82,7 +82,7 @@ Program algorithm
 * Wait *Sd* minutes (with all outputs off)
 * Set output to *SO*, pump on, countdown = *ASd* minutes
 * Wait until temp >= *St* (or end program if countdown = 0)
-* Thermostat on with output *SO*
+* Thermostat on with output *PO*
 * St alarm, countdown = *ASd* minutes
 * Wait until keypress (or end program if countdown = 0)
 * Pause (output off, pump off)
