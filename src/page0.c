@@ -598,7 +598,7 @@ void main(void) __naked {
 					}
 
 					// Divide by 64 to get back to normal temperature
-					temperature = (temp >> 6);
+					temperature = (temp >> 6) +  eeprom_read_config(EEADR_MENU_ITEM(tc));
 				}
 				
 				ad_filter = 0;
