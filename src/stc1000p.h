@@ -112,6 +112,7 @@ enum e_item_type {
 	t_tempdiff,
 	t_duration,
 	t_percentage,
+	t_period,
 	t_bool
 };
 
@@ -138,6 +139,7 @@ enum e_item_type {
     _(hd3, 	LED_h, 	LED_d, 	LED_3, 		t_duration,	15)		\
     _(hd4, 	LED_h, 	LED_d, 	LED_4,		t_duration,	5)		\
     _(tc, 	LED_t, 	LED_c, 	LED_OFF,	t_tempdiff,	0)		\
+    _(Pd, 	LED_P, 	LED_d, 	LED_OFF,	t_period,	50)		\
     _(cO, 	LED_c, 	LED_O, 	LED_OFF,	t_percentage,	80)		\
     _(cP, 	LED_c, 	LED_P, 	LED_OFF,	t_bool,		0)		\
     _(cSP, 	LED_c, 	LED_S, 	LED_P, 		t_temperature,	0)		\

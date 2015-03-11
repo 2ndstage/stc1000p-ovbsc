@@ -500,6 +500,7 @@ static void init() {
  * Receives timer2 interrupts every millisecond.
  * Handles multiplexing of the LEDs.
  */
+volatile unsigned char oc = 0;
 static void interrupt_service_routine(void) __interrupt 0 {
 
 	// Check for Timer 2 interrupt
@@ -533,6 +534,10 @@ static void interrupt_service_routine(void) __interrupt 0 {
 
 		// Enable new LED
 		LATB = latb;
+
+		if(oc){
+			oc--;
+		}
 
 		// Clear interrupt flag
 		TMR2IF = 0;
@@ -569,6 +574,11 @@ void main(void) __naked {
 			TMR6IF = 0;
 		}
 
+		if(oc==0){
+			oc = eeprom_read_config(EEADR_MENU_ITEM(Pd));
+			output_control();
+		}
+
 #ifdef T1MAIN
 		if(CCP4IF) {
 #else
@@ -576,7 +586,7 @@ void main(void) __naked {
 #endif
 			cnt16Hz++;
 
-			output_control();
+//			output_control();
 
 			// Only run every 16th time called, that is 16x62.5ms = 1 sec
 			if((cnt16Hz & 0xf) == 0) {
@@ -612,9 +622,7 @@ void main(void) __naked {
 						led_1.raw = al_led_1.raw;
 						led_01.raw = al_led_01.raw;
 					} else {
-						if(RUN_PRG && (prg_state == prg_hotbreak)){
-							int_to_led(countdown + eeprom_read_config(EEADR_MENU_ITEM(bd)));
-						} else if(RUN_PRG && (prg_state == prg_boil)){
+						if(RUN_PRG && (prg_state == prg_boil)){
 							int_to_led(countdown);
 						} else {
 							temperature_to_led(temperature);

@@ -88,6 +88,8 @@ static int check_value(unsigned char mi, int mv){
 			mv = range(mv, 0, 999);
 		} else if(menu[mi].type == t_percentage){
 			mv = range(mv, 0, 200);
+		} else if(menu[mi].type == t_period){
+			mv = range(mv, 10, 200);
 		} else if(menu[mi].type == t_bool){
 			mv = range(mv, 0, 1);
 		}
