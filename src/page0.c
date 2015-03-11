@@ -612,7 +612,13 @@ void main(void) __naked {
 						led_1.raw = al_led_1.raw;
 						led_01.raw = al_led_01.raw;
 					} else {
-						temperature_to_led(temperature);
+						if(RUN_PRG && (prg_state == prg_hotbreak)){
+							int_to_led(countdown + eeprom_read_config(EEADR_MENU_ITEM(bd)));
+						} else if(RUN_PRG && (prg_state == prg_boil)){
+							int_to_led(countdown);
+						} else {
+							temperature_to_led(temperature);
+						}
 					}
 				}
 
