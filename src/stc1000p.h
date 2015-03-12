@@ -260,6 +260,7 @@ extern void eeprom_write_config(unsigned char eeprom_address,unsigned int data);
 extern void value_to_led(int value, unsigned char decimal);
 #define int_to_led(v)		value_to_led(v, 0);
 #define temperature_to_led(v)	value_to_led(v, 1);
+#define decimal_to_led(v)	value_to_led(v, 2);
 
 /* Declare functions and variables from Page 1 */
 extern void button_menu_fsm();

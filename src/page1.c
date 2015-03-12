@@ -296,6 +296,8 @@ void button_menu_fsm(){
 			if(menu_item < MENU_SIZE){
 				if(menu[menu_item].type == t_temperature || menu[menu_item].type == t_tempdiff){
 					temperature_to_led(menu_value);
+				} else if(menu[menu_item].type == t_period){
+					decimal_to_led(menu_value);
 				} else {
 					int_to_led(menu_value);
 				}

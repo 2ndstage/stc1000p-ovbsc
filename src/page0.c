@@ -159,14 +159,16 @@ void value_to_led(int value, unsigned char decimal) {
 		led_e.e_negative = 1;
 	}
 
-	// This assumes that only temperatures and all temperatures are decimal
-	if(decimal){
+	if(decimal==1){
 		led_e.e_deg = 0;
 #ifdef FAHRENHEIT
 		led_e.e_c = 1;
 #else
 		led_e.e_c = 0;
 #endif // FAHRENHEIT
+	} else {
+		led_e.e_deg = 1;
+		led_e.e_c = 1;
 	}
 
 	// If temperature >= 100 we must lose decimal...
@@ -326,7 +328,7 @@ static void program_fsm(){
 			output = eeprom_read_config(EEADR_MENU_ITEM(SO));
 			THERMOSTAT = 0;
 			PUMP = 1;
-			if(temperature >= setpoint){
+			if(temperature >= setpoint || (eeprom_read_config(EEADR_MENU_ITEM(Pd1) + (mashstep << 1)) == 0)){
 				THERMOSTAT = 1;
 				thermostat_output = eeprom_read_config(EEADR_MENU_ITEM(PO));
 				countdown = eeprom_read_config(EEADR_MENU_ITEM(Pd1) + (mashstep << 1)); /* Mash step duration */
@@ -608,7 +610,7 @@ void main(void) __naked {
 					}
 
 					// Divide by 64 to get back to normal temperature
-					temperature = (temp >> 6) +  eeprom_read_config(EEADR_MENU_ITEM(tc));
+					temperature = (temp >> 6) + eeprom_read_config(EEADR_MENU_ITEM(tc));
 				}
 				
 				ad_filter = 0;
@@ -622,7 +624,7 @@ void main(void) __naked {
 						led_1.raw = al_led_1.raw;
 						led_01.raw = al_led_01.raw;
 					} else {
-						if(RUN_PRG && (prg_state == prg_boil)){
+						if(RUN_PRG && (prg_state == prg_boil || prg_state == prg_wait_strike)){
 							int_to_led(countdown);
 						} else {
 							temperature_to_led(temperature);

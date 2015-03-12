@@ -50,6 +50,7 @@ Parameters
 |hd3|Hop alarm 3|0-999 minutes|
 |hd4|Hop alarm 4|0-999 minutes|
 |tc|Temperature correction|-5.0 to 5°C or -10.0 to 10.0°F|
+|Pd|Set heating period interval|1.0 to 20.0 seconds|
 |cO|Manual mode output|0-200%|
 |cP|Manual mode pump|0 (=off) or 1 (=on)|
 |cSP|Manual mode thermostat setpoint|-40.0 to 140°C or -40.0 to 250°F|
